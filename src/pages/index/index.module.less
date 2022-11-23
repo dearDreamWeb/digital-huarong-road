@@ -1,4 +1,46 @@
 .indexMain {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100%;
+
+  .dataDisplay {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+    font-size: 24px;
+
+    div {
+      span {
+        font-size: 1.2em;
+        color: #FF4400;
+      }
+    }
+  }
+
+  .stageBox {
+    position: relative;
+
+    .stageMask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgb(0 0 0 / 50%);
+    }
+  }
+}
+
+.modalBox {
+  :global {
+    .ant-modal-footer {
+      button {
+        &:first-of-type {
+          display: none;
+        }
+      }
+    }
+  }
 }

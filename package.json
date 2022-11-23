@@ -13,6 +13,7 @@
     "lint:style": "stylelint \"src/**/*.(less|scss|css)\" --fix --custom-syntax postcss-less"
   },
   "dependencies": {
+    "antd": "^5.0.1",
     "eslint": "^8.25.0",
     "less": "^4.1.3",
     "pixi.js": "^7.0.4",

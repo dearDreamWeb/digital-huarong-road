@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './index.module.less';
 import * as PIXI from 'pixi.js';
-import { IGLUniformData } from 'pixi.js';
+import { Modal } from 'antd';
 
 const defaultList = [
   [1, 2, 3],
@@ -14,13 +14,14 @@ const stageHeight = 600;
 
 const Index = () => {
   const [app, setApp] = useState<PIXI.Application<PIXI.ICanvas>>();
-  const numberList = useRef<PIXI.Container<PIXI.DisplayObject>[]>([]);
+  const [numberList, setNumberList] = useState<Array<Array<number | null>>>([]);
   const layoutNumbers = useRef<Array<Array<number | null>>>(
     JSON.parse(JSON.stringify(defaultList))
   );
   const [isWin, setIsWin] = useState(false);
   const [step, setStep] = useState(0);
   const [time, setTime] = useState(0);
+  const [isStop, setIsStop] = useState(false);
   const timerInterval = useRef<NodeJS.Timer>();
 
   useEffect(() => {
@@ -50,15 +51,13 @@ const Index = () => {
 
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < columns; j++) {
-        const rect = createRect({
+        createRect({
           x: j * itemWidth,
           y: i * itemHeight,
           w: itemWidth,
           h: itemHeight,
           text: layoutNumbers.current[i][j],
         });
-
-        // numberList.current.push(rect);
       }
     }
   }, [app]);
@@ -66,9 +65,19 @@ const Index = () => {
   useEffect(() => {
     if (isWin) {
       console.log(isWin, '你赢啦！');
+      setIsStop(true);
+      timerInterval.current && clearInterval(timerInterval.current);
     }
   }, [isWin]);
 
+  const reStart = () => {
+    randomLayout();
+    timeClock();
+  };
+
+  /**
+   * 计时器
+   */
   const timeClock = () => {
     timerInterval.current && clearInterval(timerInterval.current);
     timerInterval.current = setInterval(() => {
@@ -138,6 +147,7 @@ const Index = () => {
           newArr.push(tempArr);
         }
         layoutNumbers.current = newArr;
+        setNumberList(newArr);
         setIsWin(
           defaultList.flat().join() === layoutNumbers.current.flat().join()
         );
@@ -189,6 +199,7 @@ const Index = () => {
     }
 
     layoutNumbers.current = newLayoutArr;
+    setNumberList(newLayoutArr);
   };
 
   const createRect = ({
@@ -246,9 +257,33 @@ const Index = () => {
 
   return (
     <div className={styles.indexMain}>
-      <div>步数:{step}</div>
-      <div>时间:{(time / 1000).toFixed(2)}秒</div>
-      <canvas id="mainCanvas"></canvas>
+      <div>
+        <div className={styles.dataDisplay}>
+          <div>
+            步数:<span>{step}</span>
+          </div>
+          <div>
+            时间:<span>{(time / 1000).toFixed(2)}</span>秒
+          </div>
+        </div>
+        <div className={styles.stageBox}>
+          <canvas id="mainCanvas"></canvas>
+          {isStop && <div className={styles.stageMask}></div>}
+        </div>
+      </div>
+      <Modal
+        title="恭喜"
+        open={isWin}
+        onOk={() => setIsWin(false)}
+        onCancel={() => setIsWin(false)}
+        okText="确定"
+        className={styles.modalBox}
+        maskClosable={false}
+      >
+        <div>恭喜你赢啦！！！</div>
+        <div>步数：{step}</div>
+        <div>用时：{(time / 1000).toFixed(2)}秒</div>
+      </Modal>
     </div>
   );
 };
