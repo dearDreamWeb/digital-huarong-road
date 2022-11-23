@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './index.module.less';
 import * as PIXI from 'pixi.js';
+import { IGLUniformData } from 'pixi.js';
 
 const defaultList = [
-  [1, 2, 3, 4],
-  [5, 6, 7, 8],
-  [9, 10, 11, 12],
-  [13, 14, 15, null],
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, null],
 ];
 
 const stageWidth = 600;
@@ -20,6 +20,8 @@ const Index = () => {
   );
   const [isWin, setIsWin] = useState(false);
   const [step, setStep] = useState(0);
+  const [time, setTime] = useState(0);
+  const timerInterval = useRef<NodeJS.Timer>();
 
   useEffect(() => {
     randomLayout();
@@ -31,6 +33,10 @@ const Index = () => {
       view: document.getElementById('mainCanvas') as HTMLCanvasElement,
     });
     setApp(_app);
+    timeClock();
+    return () => {
+      timerInterval.current && clearInterval(timerInterval.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -60,9 +66,15 @@ const Index = () => {
   useEffect(() => {
     if (isWin) {
       console.log(isWin, '你赢啦！');
-      alert(`你赢啦！\n 步数：${step}`);
     }
   }, [isWin]);
+
+  const timeClock = () => {
+    timerInterval.current && clearInterval(timerInterval.current);
+    timerInterval.current = setInterval(() => {
+      setTime((value) => value + 10);
+    }, 10);
+  };
 
   /**
    * 方格点击事件
@@ -88,7 +100,6 @@ const Index = () => {
           newIndex = index - 1;
         }
       } else if (arr[index + 1] === null) {
-        console.log(index, columns);
         if (index % columns !== columns - 1) {
           direction = 'right';
           newIndex = index + 1;
@@ -102,7 +113,6 @@ const Index = () => {
       }
 
       if (direction) {
-        console.log(direction);
         // 格子进行移动
         const itemWidth = stageWidth / columns;
         const itemHeight = stageWidth / rows;
@@ -133,7 +143,6 @@ const Index = () => {
         );
         setStep((step) => step + 1);
       }
-      console.log('graphics', text);
     });
   };
 
@@ -144,19 +153,37 @@ const Index = () => {
     const rows = layoutNumbers.current.length;
     const columns = layoutNumbers.current[0].length;
     let arr = layoutNumbers.current.flat();
-    let newArr = [];
-    while (arr.length) {
-      const len = arr.length;
-      const randomIndex = Math.floor(Math.random() * len);
-      newArr.push(arr[randomIndex]);
-      arr.splice(randomIndex, 1);
-    }
+    let randomSteps = Math.floor(
+      Math.random() * arr.length * 2 + arr.length * 5
+    );
+    let directionArr = ['left', 'right', 'top', 'bottom'];
+    for (let i = 0; i < randomSteps; i++) {
+      const index = arr.indexOf(null);
+      const direction =
+        directionArr[Math.floor(Math.random() * directionArr.length)];
 
+      if (direction === 'left' && index % columns !== 0) {
+        arr[index] = arr[index - 1];
+        arr[index - 1] = null;
+      } else if (direction === 'right' && index % columns !== columns - 1) {
+        arr[index] = arr[index + 1];
+        arr[index + 1] = null;
+      } else if (direction === 'top' && Math.floor(index / columns) !== 0) {
+        arr[index] = arr[index - columns];
+        arr[index - columns] = null;
+      } else if (
+        direction === 'bottom' &&
+        Math.floor(index / columns) !== rows - 1
+      ) {
+        arr[index] = arr[index + columns];
+        arr[index + columns] = null;
+      }
+    }
     let newLayoutArr = [];
     for (let i = 0; i < rows; i++) {
       let tempArr = [];
       for (let j = 0; j < columns; j++) {
-        tempArr.push(newArr[i * columns + j]);
+        tempArr.push(arr[i * columns + j]);
       }
       newLayoutArr.push(tempArr);
     }
@@ -189,9 +216,10 @@ const Index = () => {
 
     const numberRect = new PIXI.Graphics();
     numberRect.lineStyle(2, 0x000000, 1); //边线(宽度，颜色，透明度)
-    numberRect.beginFill(0xc5ac06); //填充
+    numberRect.beginFill(0x1099bb); //填充
     numberRect.drawRect(x, y, w, h); //x,y,w,h
     numberRect.endFill();
+    numberRect.filters = [new PIXI.filters.NoiseFilter(0.3, 0.6)];
 
     let pixiText = new PIXI.Text(`${text || ''}`, {
       fontFamily: 'Arial',
@@ -219,6 +247,7 @@ const Index = () => {
   return (
     <div className={styles.indexMain}>
       <div>步数:{step}</div>
+      <div>时间:{(time / 1000).toFixed(2)}秒</div>
       <canvas id="mainCanvas"></canvas>
     </div>
   );
