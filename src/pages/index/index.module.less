@@ -11,8 +11,8 @@
     margin: 8px 0;
     font-size: 24px;
 
-    div {
-      span {
+    & > div {
+      & > span {
         font-size: 1.2em;
         color: #FF4400;
       }
@@ -34,6 +34,9 @@
 }
 
 .modalBox {
+  top: 50%;
+  transform: translateY(-50%);
+
   :global {
     .ant-modal-footer {
       button {

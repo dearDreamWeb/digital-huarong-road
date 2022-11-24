@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './index.module.less';
 import * as PIXI from 'pixi.js';
-import { Modal } from 'antd';
+import { Modal, Select } from 'antd';
 
 const defaultList = [
   [1, 2, 3],
@@ -9,12 +9,21 @@ const defaultList = [
   [7, 8, null],
 ];
 
+const optionsList = [
+  { value: '3X3', label: '3X3' },
+  { value: '2X3', label: '2X3' },
+  { value: '4X4', label: '4X4' },
+  { value: '5X5', label: '5X5' },
+];
+
 const stageWidth = 600;
 const stageHeight = 600;
 
 const Index = () => {
   const [app, setApp] = useState<PIXI.Application<PIXI.ICanvas>>();
-  const [numberList, setNumberList] = useState<Array<Array<number | null>>>([]);
+  const preLayoutNumbers = useRef<Array<Array<number | null>>>(
+    JSON.parse(JSON.stringify(defaultList))
+  );
   const layoutNumbers = useRef<Array<Array<number | null>>>(
     JSON.parse(JSON.stringify(defaultList))
   );
@@ -22,6 +31,7 @@ const Index = () => {
   const [step, setStep] = useState(0);
   const [time, setTime] = useState(0);
   const [isStop, setIsStop] = useState(false);
+  const [selectOption, setSelectOption] = useState(optionsList[0].value);
   const timerInterval = useRef<NodeJS.Timer>();
 
   useEffect(() => {
@@ -40,10 +50,10 @@ const Index = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (!app) {
-      return;
-    }
+  /**
+   * 创建方格容器
+   */
+  const createItem = () => {
     const rows = layoutNumbers.current.length;
     const columns = layoutNumbers.current[0].length;
     const itemWidth = stageWidth / columns;
@@ -60,6 +70,13 @@ const Index = () => {
         });
       }
     }
+  };
+
+  useEffect(() => {
+    if (!app) {
+      return;
+    }
+    createItem();
   }, [app]);
 
   useEffect(() => {
@@ -70,10 +87,42 @@ const Index = () => {
     }
   }, [isWin]);
 
+  /**
+   * 重置数据
+   */
   const reStart = () => {
+    if (app) {
+      app.stage.removeChildren();
+    }
+    setIsStop(false);
+    setTime(0);
     randomLayout();
     timeClock();
   };
+
+  useEffect(() => {
+    if (!app) {
+      return;
+    }
+    const rows1 = Number(selectOption.split('X')[0]);
+    const columns1 = Number(selectOption.split('X')[1]);
+    const arr = [];
+    for (let i = 0; i < rows1; i++) {
+      let tempArr = [];
+      for (let j = 0; j < columns1; j++) {
+        if (j === columns1 - 1 && i === rows1 - 1) {
+          tempArr.push(null);
+        } else {
+          tempArr.push(i * columns1 + j + 1);
+        }
+      }
+      arr.push(tempArr);
+    }
+    preLayoutNumbers.current = arr;
+    layoutNumbers.current = arr;
+    reStart();
+    createItem();
+  }, [selectOption]);
 
   /**
    * 计时器
@@ -147,9 +196,9 @@ const Index = () => {
           newArr.push(tempArr);
         }
         layoutNumbers.current = newArr;
-        setNumberList(newArr);
         setIsWin(
-          defaultList.flat().join() === layoutNumbers.current.flat().join()
+          preLayoutNumbers.current.flat().join() ===
+            layoutNumbers.current.flat().join()
         );
         setStep((step) => step + 1);
       }
@@ -199,7 +248,6 @@ const Index = () => {
     }
 
     layoutNumbers.current = newLayoutArr;
-    setNumberList(newLayoutArr);
   };
 
   const createRect = ({
@@ -218,6 +266,7 @@ const Index = () => {
     if (!text) {
       return;
     }
+
     const pixiContainer = new PIXI.Container();
     pixiContainer.width = w;
     pixiContainer.height = h;
@@ -255,6 +304,10 @@ const Index = () => {
     return pixiContainer;
   };
 
+  const selectChange = (value: string) => {
+    setSelectOption(value);
+  };
+
   return (
     <div className={styles.indexMain}>
       <div>
@@ -264,6 +317,14 @@ const Index = () => {
           </div>
           <div>
             时间:<span>{(time / 1000).toFixed(2)}</span>秒
+          </div>
+          <div>
+            <Select
+              style={{ width: 120 }}
+              value={selectOption}
+              onChange={selectChange}
+              options={optionsList}
+            ></Select>
           </div>
         </div>
         <div className={styles.stageBox}>
