@@ -14,6 +14,15 @@ export default defineConfig({
     }),
   ],
   base: './',
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          antd: ['antd'],
+        },
+      },
+    },
+  },
   server: {
     port: 1321,
   },

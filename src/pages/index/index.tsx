@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './index.module.less';
 import * as PIXI from 'pixi.js';
 import { Modal, Select } from 'antd';
+import JSEncrypt from 'jsencrypt';
+import { login } from '@/api/api';
 
 const defaultList = [
   [1, 2, 3],
@@ -330,6 +332,9 @@ const Index = () => {
         <div className={styles.stageBox}>
           <canvas id="mainCanvas"></canvas>
           {isStop && <div className={styles.stageMask}></div>}
+          <div className={styles.leaderBoardBox}>
+            <div className={styles.leaderBoardTitle}>排行榜🔥</div>
+          </div>
         </div>
       </div>
       <Modal
