@@ -10,7 +10,7 @@
     "lint": "npx --no -- lint-staged",
     "prepare": "husky install",
     "fix": "eslint src/**/*.*  --fix",
-    "lint:style": "stylelint \"src/**/*.(less|scss|css)\" --fix --custom-syntax postcss-less"
+    "lint:style": "stylelint \"src/**/*.(less|scss|css)\" --fix"
   },
   "dependencies": {
     "antd": "^5.0.1",
@@ -57,7 +57,7 @@
       "eslint src --cache --fix",
       "git add ."
     ],
-    "**/*.*.less": [
+    "**/*.less": [
       "npm run lint:style",
       "git add ."
     ],
