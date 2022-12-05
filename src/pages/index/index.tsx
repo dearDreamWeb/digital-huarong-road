@@ -34,6 +34,7 @@ const Index = () => {
   const [time, setTime] = useState(0);
   const [isStop, setIsStop] = useState(false);
   const [selectOption, setSelectOption] = useState(optionsList[0].value);
+  const [topType, setTopType] = useState('steps');
   const timerInterval = useRef<NodeJS.Timer>();
 
   useEffect(() => {
@@ -284,7 +285,7 @@ const Index = () => {
     numberRect.filters = [new PIXI.filters.NoiseFilter(0.3, 0.6)];
 
     let pixiText = new PIXI.Text(`${text || ''}`, {
-      fontFamily: 'Arial',
+      fontFamily: 'ZpixLocal',
       fontSize: 36,
       stroke: '#4a1850',
       fontWeight: 'bold',
@@ -334,6 +335,10 @@ const Index = () => {
           {isStop && <div className={styles.stageMask}></div>}
           <div className={styles.leaderBoardBox}>
             <div className={styles.leaderBoardTitle}>排行榜🔥</div>
+            {/* <div className={styles.topType}>
+              <div>步数优先</div>
+              <div>时间优先</div>
+            </div> */}
           </div>
         </div>
       </div>

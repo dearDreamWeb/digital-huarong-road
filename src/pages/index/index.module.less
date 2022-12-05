@@ -4,6 +4,19 @@
   align-items: center;
   width: 100%;
   height: 100%;
+  font-family: ZpixLocal, sans-serif;
+  font-weight: bold;
+  color: #68F9CB;
+  background:
+    url("https://resource.blogwxb.cn/digitalHuarongRoad/1yqmDdLxm8.jpg")
+    no-repeat;
+  background-size: 100% 100%;
+  text-rendering: optimizelegibility;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: none;
+  font-feature-settings: "tnum";
+
+  --background-color: #EEFEE4;
 
   .dataDisplay {
     display: flex;
@@ -13,6 +26,8 @@
 
     & > div {
       & > span {
+        display: inline-block;
+        width: 2.5em;
         font-size: 1.2em;
         color: #FF4400;
       }
@@ -35,16 +50,43 @@
       position: absolute;
       top: 0;
       left: calc(100% + 12px);
+      border: 4px solid;
       border-radius: 8px;
       width: 200px;
       height: 100%;
-      color: #FFFFFF;
-      background-color: #1F1D1D;
+      background: linear-gradient(to right, #F1268C, #6DF4B7);
+      border-image: linear-gradient(to right, #8F41E9, #578AEF) 1;
 
       .leaderBoardTitle {
         margin-top: 12px;
         font-size: 28px;
         text-align: center;
+        background-image: linear-gradient(to right, #339CE8, #E4EF6F);
+        /* stylelint-disable-next-line property-no-vendor-prefix */
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .topType {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 12px;
+        border-radius: 5px;
+        height: 40px;
+        color: #000000;
+        background-color: #FFFFFF;
+
+        & :first-of-type {
+          border-right: 2px solid #000000;
+        }
+
+        div {
+          flex: 1;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 18px;
+        }
       }
     }
   }
