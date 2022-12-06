@@ -1406,6 +1406,18 @@ cliui@^8.0.1:
     strip-ansi "^6.0.1"
     wrap-ansi "^7.0.0"
 
+cnchar-types@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/cnchar-types/-/cnchar-types-3.2.2.tgz#ff4cc0161a05e0e62b1feff2e3e6bb142277dddc"
+  integrity sha512-25h6rT/c7r3CUC5VRp/roSGgAb2XRwUqHlJVZ1fRIXcOY+g+qoCnUsUIuLvsyV5hX7ReD+/9fraScL41Vowljg==
+
+cnchar@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/cnchar/-/cnchar-3.2.2.tgz#76168414056f798e17436ea8e56860a44684b440"
+  integrity sha512-Ywqw40EP9jkIvSgwdDKqnwWj32ArRR3o2nKZ0NfaMCe4f8BIF1eD1NwtoCLm82SxqJuCnlHPoDHfPtmERd0V6A==
+  dependencies:
+    cnchar-types "^3.2.2"
+
 color-convert@^1.9.0:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.3.tgz#bb71850690e1f136567de629d2d5471deda4c1e8"

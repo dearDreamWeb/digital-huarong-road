@@ -4,6 +4,7 @@ import * as PIXI from 'pixi.js';
 import { Modal, Select } from 'antd';
 import JSEncrypt from 'jsencrypt';
 import { login } from '@/api/api';
+import { getRandomName, randomAccess, createHash } from '../../utils';
 
 const defaultList = [
   [1, 2, 3],
@@ -21,6 +22,11 @@ const optionsList = [
 const stageWidth = 600;
 const stageHeight = 600;
 
+interface UserInfo {
+  userId: string;
+  nickname: string;
+}
+
 const Index = () => {
   const [app, setApp] = useState<PIXI.Application<PIXI.ICanvas>>();
   const preLayoutNumbers = useRef<Array<Array<number | null>>>(
@@ -35,9 +41,14 @@ const Index = () => {
   const [isStop, setIsStop] = useState(false);
   const [selectOption, setSelectOption] = useState(optionsList[0].value);
   const [topType, setTopType] = useState('steps');
+  const [userInfo, setUserInfo] = useState<UserInfo>({
+    userId: '',
+    nickname: '',
+  });
   const timerInterval = useRef<NodeJS.Timer>();
 
   useEffect(() => {
+    getNickname();
     randomLayout();
     let _app = new PIXI.Application({
       width: stageWidth,
@@ -52,6 +63,23 @@ const Index = () => {
       timerInterval.current && clearInterval(timerInterval.current);
     };
   }, []);
+
+  /**
+   * 获取用户名
+   */
+  const getNickname = () => {
+    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    if (userInfo.userId && userInfo.nickname) {
+      setUserInfo(userInfo);
+    } else {
+      const userInfo = {
+        nickname: getRandomName(randomAccess(2, 6)),
+        userId: createHash(),
+      };
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      setUserInfo(userInfo);
+    }
+  };
 
   /**
    * 创建方格容器
@@ -313,7 +341,11 @@ const Index = () => {
 
   return (
     <div className={styles.indexMain}>
-      <div>
+      <h1 className={styles.gameTitle}>数字华容道</h1>
+      <div className={styles.indexBox}>
+        <div className={styles.username}>
+          你好哇！<span>{userInfo.nickname || ''}</span>
+        </div>
         <div className={styles.dataDisplay}>
           <div>
             步数:<span>{step}</span>
