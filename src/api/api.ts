@@ -1,21 +1,11 @@
 import request from './request';
 
 /**
- * 登录
+ * 游戏得分历史记录
  */
-export const login = (data: any) => {
-  return request('/user/login', {
-    method: 'post',
-    data,
-  });
-};
-
-/**
- * 注册
- */
-export const register = (data: any) => {
-  return request('/user/register', {
-    method: 'post',
+export const getGameTop = (data: any) => {
+  return request('/game/getGameTop', {
+    method: 'get',
     data,
   });
 };
@@ -23,8 +13,8 @@ export const register = (data: any) => {
 /**
  * 游戏得分上传
  */
-export const createGame = (data: any) => {
-  return request('/game/create', {
+export const digital = (data: any) => {
+  return request('/game/digital', {
     method: 'post',
     data,
   });

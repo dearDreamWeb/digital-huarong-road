@@ -2,9 +2,19 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './index.module.less';
 import * as PIXI from 'pixi.js';
 import { Modal, Select } from 'antd';
-import JSEncrypt from 'jsencrypt';
-import { login } from '@/api/api';
-import { getRandomName, randomAccess, createHash } from '../../utils';
+import { getGameTop, digital } from '@/api/api';
+import { getRandomName, randomAccess, createHash, encrypt } from '../../utils';
+
+interface UserInfo {
+  userId: string;
+  nickname: string;
+}
+interface TopListItem {
+  user_id: string;
+  id: string;
+  nick_name: string;
+  score: number;
+}
 
 const defaultList = [
   [1, 2, 3],
@@ -22,11 +32,6 @@ const optionsList = [
 const stageWidth = 600;
 const stageHeight = 600;
 
-interface UserInfo {
-  userId: string;
-  nickname: string;
-}
-
 const Index = () => {
   const [app, setApp] = useState<PIXI.Application<PIXI.ICanvas>>();
   const preLayoutNumbers = useRef<Array<Array<number | null>>>(
@@ -40,12 +45,13 @@ const Index = () => {
   const [time, setTime] = useState(0);
   const [isStop, setIsStop] = useState(false);
   const [selectOption, setSelectOption] = useState(optionsList[0].value);
-  const [topType, setTopType] = useState('steps');
   const [userInfo, setUserInfo] = useState<UserInfo>({
     userId: '',
     nickname: '',
   });
+  const [topList, setTopList] = useState<TopListItem[]>([]);
   const timerInterval = useRef<NodeJS.Timer>();
+  const stepRef = useRef(0);
 
   useEffect(() => {
     getNickname();
@@ -63,6 +69,25 @@ const Index = () => {
       timerInterval.current && clearInterval(timerInterval.current);
     };
   }, []);
+
+  useEffect(() => {
+    getGameTopHandler();
+  }, [selectOption]);
+
+  /**
+   * 获取游戏top榜
+   * @returns
+   */
+  const getGameTopHandler = async () => {
+    const res: any = await getGameTop({
+      gameName: 'digitalHuarongRoad',
+      subName: selectOption,
+    });
+    if (!res.success) {
+      return;
+    }
+    setTopList(res.data);
+  };
 
   /**
    * 获取用户名
@@ -112,9 +137,20 @@ const Index = () => {
 
   useEffect(() => {
     if (isWin) {
-      console.log(isWin, '你赢啦！');
       setIsStop(true);
       timerInterval.current && clearInterval(timerInterval.current);
+      digital({
+        gameName: 'digitalHuarongRoad',
+        subName: selectOption,
+        score: encrypt(stepRef.current.toString()),
+        userId: userInfo.userId,
+        nickName: userInfo.nickname,
+      }).then((res: any) => {
+        if (!res.success) {
+          return;
+        }
+        getGameTopHandler();
+      });
     }
   }, [isWin]);
 
@@ -231,7 +267,10 @@ const Index = () => {
           preLayoutNumbers.current.flat().join() ===
             layoutNumbers.current.flat().join()
         );
-        setStep((step) => step + 1);
+        setStep((step) => {
+          stepRef.current = step + 1;
+          return step + 1;
+        });
       }
     });
   };
@@ -341,8 +380,8 @@ const Index = () => {
 
   return (
     <div className={styles.indexMain}>
-      <h1 className={styles.gameTitle}>数字华容道</h1>
       <div className={styles.indexBox}>
+        <h1 className={styles.gameTitle}>数字华容道</h1>
         <div className={styles.username}>
           你好哇！<span>{userInfo.nickname || ''}</span>
         </div>
@@ -367,10 +406,15 @@ const Index = () => {
           {isStop && <div className={styles.stageMask}></div>}
           <div className={styles.leaderBoardBox}>
             <div className={styles.leaderBoardTitle}>排行榜🔥</div>
-            {/* <div className={styles.topType}>
-              <div>步数优先</div>
-              <div>时间优先</div>
-            </div> */}
+            <div className={styles.topListBox}>
+              {topList.map((item, index) => (
+                <div key={item.id} className={styles.topListItem}>
+                  <span>{index + 1}</span>
+                  <span>{item.nick_name}</span>
+                  <span>{item.score}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

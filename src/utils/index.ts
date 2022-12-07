@@ -1,4 +1,5 @@
 import cnchar from 'cnchar';
+import JSEncrypt from 'jsencrypt';
 
 // 获取指定范围内的随机数
 export function randomAccess(min: number, max: number) {
@@ -116,3 +117,16 @@ export function createHash(hashLength = 24): string {
 
   return hs.join('');
 }
+
+export const encrypt = (text: string) => {
+  // 公钥内容
+  const PUB_KEY = `-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCXmcNDjKGBmElq0jTkRS/3Mkuj
+MMxLwg4KOcmITJrI7OPb6azpYorGxHFgGFt5JMtv7mF4xY/8GGJHaNIDhmVLZWZj
+iX0SQZ4M/yKkFI8krvozBtuVnozJJK27dVuHIKkcAebwHhVlsbuZL8Vd6sDe2cFH
+1navPLydNQYfXjP8xwIDAQAB
+-----END PUBLIC KEY-----`;
+  let encrypt = new JSEncrypt();
+  encrypt.setPublicKey(PUB_KEY);
+  return encrypt.encrypt(text);
+};

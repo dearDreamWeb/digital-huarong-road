@@ -19,21 +19,18 @@
 
   --background-color: #EEFEE4;
 
-  .gameTitle {
-    position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 100px;
-    text-align: center;
-    background-image: linear-gradient(to right, #65F590, #6F80EF);
-    /* stylelint-disable-next-line property-no-vendor-prefix */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
   .indexBox {
     position: relative;
+
+    .gameTitle {
+      margin-bottom: 24px;
+      font-size: 100px;
+      text-align: center;
+      background-image: linear-gradient(to right, #65F590, #6F80EF);
+      /* stylelint-disable-next-line property-no-vendor-prefix */
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
     .username {
       margin-bottom: 24px;
@@ -90,6 +87,7 @@
 
         .leaderBoardTitle {
           margin-top: 12px;
+          margin-bottom: 12px;
           font-size: 28px;
           text-align: center;
           background-image: linear-gradient(to right, #339CE8, #E4EF6F);
@@ -98,25 +96,53 @@
           -webkit-text-fill-color: transparent;
         }
 
-        .topType {
-          display: flex;
-          justify-content: space-between;
-          margin-top: 12px;
-          border-radius: 5px;
-          height: 40px;
-          color: #000000;
-          background-color: #FFFFFF;
+        .topListBox {
+          padding: 0 12px;
+          font-size: 30px;
 
-          & :first-of-type {
-            border-right: 2px solid #000000;
-          }
-
-          div {
-            flex: 1;
+          .topListItem {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            font-size: 18px;
+            margin-bottom: 8px;
+
+            &:nth-of-type(1) {
+              & :first-child {
+                color: #FFFFFF;
+                background-color: #FFD700;
+              }
+            }
+
+            &:nth-of-type(2) {
+              & :first-child {
+                color: #FFFFFF;
+                background-color: #C0C0C0;
+              }
+            }
+
+            &:nth-of-type(3) {
+              & :first-child {
+                color: #FFFFFF;
+                background-color: #CE916A;
+              }
+            }
+
+            & :first-child {
+              display: inline-flex;
+              justify-content: center;
+              align-items: center;
+              border-radius: 50%;
+              padding: 4px;
+              width: 28px;
+              height: 28px;
+              font-size: 24px;
+              color: #CCCCCC;
+              background-color: #FFFFFF;
+            }
+
+            & :last-child {
+              color: #FF0909;
+            }
           }
         }
       }
