@@ -84,8 +84,18 @@ table {
   border-collapse: collapse;
 }
 
-html {
+html,
+body {
   overflow-y: scroll;
+  font-family: ZpixLocal, sans-serif;
+  font-weight: bold;
+  color: #68F9CB;
+  text-rendering: optimizelegibility;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: none;
+  font-feature-settings: "tnum";
+
+  --background-color: #EEFEE4;
 }
 
 .clearfix::after {
