@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 const instance = axios.create({
-  baseURL: 'https://middle-platform.vercel.app/api',
+  baseURL: 'https://middle-platform.blogwxb.cn/api',
   timeout: 1000 * 60,
 });
 

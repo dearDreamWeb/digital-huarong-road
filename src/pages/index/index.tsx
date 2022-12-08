@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './index.module.less';
 import * as PIXI from 'pixi.js';
-import { Modal, Select } from 'antd';
+import { Modal, Select, Spin } from 'antd';
 import { getGameTop, digital } from '@/api/api';
 import { getRandomName, randomAccess, createHash, encrypt } from '../../utils';
 
@@ -43,6 +43,7 @@ const Index = () => {
   const [isWin, setIsWin] = useState(false);
   const [step, setStep] = useState(0);
   const [time, setTime] = useState(0);
+  // 游戏停止
   const [isStop, setIsStop] = useState(false);
   const [selectOption, setSelectOption] = useState(optionsList[0].value);
   const [userInfo, setUserInfo] = useState<UserInfo>({
@@ -50,6 +51,7 @@ const Index = () => {
     nickname: '',
   });
   const [topList, setTopList] = useState<TopListItem[]>([]);
+  const [loading, setLoading] = useState(false);
   const timerInterval = useRef<NodeJS.Timer>();
   const stepRef = useRef(0);
 
@@ -79,14 +81,20 @@ const Index = () => {
    * @returns
    */
   const getGameTopHandler = async () => {
+    setLoading(true);
     const res: any = await getGameTop({
       gameName: 'digitalHuarongRoad',
       subName: selectOption,
     });
+    setLoading(false);
     if (!res.success) {
       return;
     }
-    setTopList(res.data);
+    setTopList(
+      res.data.map((item: any) => {
+        return { ...item, id: item._id };
+      })
+    );
   };
 
   /**
@@ -171,6 +179,15 @@ const Index = () => {
     if (!app) {
       return;
     }
+    reLayout();
+    reStart();
+    createItem();
+  }, [selectOption]);
+
+  /**
+   * 按照当前的选择模式初始化数据
+   */
+  const reLayout = () => {
     const rows1 = Number(selectOption.split('X')[0]);
     const columns1 = Number(selectOption.split('X')[1]);
     const arr = [];
@@ -187,9 +204,7 @@ const Index = () => {
     }
     preLayoutNumbers.current = arr;
     layoutNumbers.current = arr;
-    reStart();
-    createItem();
-  }, [selectOption]);
+  };
 
   /**
    * 计时器
@@ -403,7 +418,20 @@ const Index = () => {
         </div>
         <div className={styles.stageBox}>
           <canvas id="mainCanvas"></canvas>
-          {isStop && <div className={styles.stageMask}></div>}
+          {isStop && (
+            <div className={styles.stageMask}>
+              <div
+                className={styles.restartBtn}
+                onClick={() => {
+                  reLayout();
+                  reStart();
+                  createItem();
+                }}
+              >
+                重新开始
+              </div>
+            </div>
+          )}
           <div className={styles.leaderBoardBox}>
             <div className={styles.leaderBoardTitle}>排行榜🔥</div>
             <div className={styles.topListBox}>
@@ -415,6 +443,11 @@ const Index = () => {
                 </div>
               ))}
             </div>
+            {loading && (
+              <div className={styles.loadingBox}>
+                <Spin tip="Loading" />
+              </div>
+            )}
           </div>
         </div>
       </div>
