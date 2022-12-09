@@ -393,14 +393,23 @@ const Index = () => {
     setSelectOption(value);
   };
 
+  const changeNickname = () => {
+    localStorage.removeItem('userInfo');
+    getNickname();
+  };
+
   return (
     <div className={styles.indexMain}>
       <div className={styles.indexBox}>
         <h1 className={styles.gameTitle}>数字华容道</h1>
         <div className={styles.username}>
           你好哇！<span>{userInfo.nickname || ''}</span>
+          <span onClick={changeNickname}>更换昵称</span>
         </div>
-        <div className={styles.dataDisplay}>
+        <div
+          className={styles.dataDisplay}
+          style={{ width: `${stageWidth}px` }}
+        >
           <div>
             步数:<span>{step}</span>
           </div>
@@ -416,7 +425,7 @@ const Index = () => {
             ></Select>
           </div>
         </div>
-        <div className={styles.stageBox}>
+        <div className={styles.stageBox} style={{ height: `${stageHeight}px` }}>
           <canvas id="mainCanvas"></canvas>
           {isStop && (
             <div className={styles.stageMask}>
@@ -438,7 +447,7 @@ const Index = () => {
               {topList.map((item, index) => (
                 <div key={item.id} className={styles.topListItem}>
                   <span>{index + 1}</span>
-                  <span>{item.nick_name}</span>
+                  <span title={item.nick_name}>{item.nick_name}</span>
                   <span>{item.score}</span>
                 </div>
               ))}
