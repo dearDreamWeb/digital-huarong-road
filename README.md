@@ -3,7 +3,7 @@
 最近老是抖音老是刷到一个小孩子玩数字华容道特别厉害，我感觉挺有趣的，就做了一个数字华容道，上班摸鱼可以玩，哈哈哈哈哈。  
 <img src="https://resource.blogwxb.cn/digitalHuarongRoad/screen-recording.gif"/>
 
-[项目预览地址](https://dhr.blogwxb.cn)
+[项目预览地址](https://dhr.blogwxb.cn)  
 [项目地址](https://github.com/dearDreamWeb/digital-huarong-road) 喜欢的话请给个 star⭐️
 
 整体的样式是采用了`像素风格`。
