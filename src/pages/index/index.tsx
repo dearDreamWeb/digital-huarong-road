@@ -170,6 +170,7 @@ const Index = () => {
       app.stage.removeChildren();
     }
     setIsStop(false);
+    setStep(0);
     setTime(0);
     randomLayout();
     timeClock();
