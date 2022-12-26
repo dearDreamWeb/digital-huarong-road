@@ -27,6 +27,9 @@ const optionsList = [
   { value: '2X3', label: '2X3' },
   { value: '4X4', label: '4X4' },
   { value: '5X5', label: '5X5' },
+  { value: '6X6', label: '6X6' },
+  { value: '7X7', label: '7X7' },
+  { value: '8X8', label: '8X8' },
 ];
 
 const stageWidth = 600;
@@ -369,7 +372,7 @@ const Index = () => {
 
     let pixiText = new PIXI.Text(`${text || ''}`, {
       fontFamily: 'ZpixLocal',
-      fontSize: 36,
+      fontSize: Number(selectOption.split('X')[0]) > 6 ? 28 : 36,
       stroke: '#4a1850',
       fontWeight: 'bold',
       fill: ['#ffffff', '#00ff99'],
