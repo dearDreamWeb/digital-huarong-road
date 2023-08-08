@@ -14,7 +14,7 @@ export const getGameTop = (data: any) => {
  * 游戏得分上传
  */
 export const digital = (data: any) => {
-  return request('/game/digital', {
+  return request('/game/addGameHistory', {
     method: 'post',
     data,
   });

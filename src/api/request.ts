@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 const instance = axios.create({
-  baseURL: 'https://middle-platform.blogwxb.cn/api',
+  baseURL: 'https://hangpiao.blogwxb.cn/goMiddlePlatform',
   timeout: 1000 * 60,
 });
 

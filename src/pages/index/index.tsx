@@ -94,7 +94,7 @@ const Index = () => {
       return;
     }
     setTopList(
-      res.data.map((item: any) => {
+      res.data?.result.map((item: any) => {
         return { ...item, id: item._id };
       })
     );
