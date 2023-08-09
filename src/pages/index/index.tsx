@@ -10,9 +10,9 @@ interface UserInfo {
   nickname: string;
 }
 interface TopListItem {
-  user_id: string;
+  userId: string;
   id: string;
-  nick_name: string;
+  nickName: string;
   score: number;
 }
 
@@ -451,7 +451,7 @@ const Index = () => {
               {topList.map((item, index) => (
                 <div key={item.id} className={styles.topListItem}>
                   <span>{index + 1}</span>
-                  <span title={item.nick_name}>{item.nick_name}</span>
+                  <span title={item.nickName}>{item.nickName}</span>
                   <span>{item.score}</span>
                 </div>
               ))}
