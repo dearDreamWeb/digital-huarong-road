@@ -59,6 +59,8 @@ const Index = () => {
   const stepRef = useRef(0);
 
   useEffect(() => {
+    console.log(1111, import.meta.env);
+    encrypt('1231');
     getNickname();
     randomLayout();
     let _app = new PIXI.Application({

@@ -42,7 +42,7 @@ function translateName(index?: number): string {
 
   if (
     randomIndex === 0 &&
-    (cnchar.stroke(result) === 0 || cnchar.stroke(result) > 10)
+    (cnchar.stroke(result) === 0 || (cnchar.stroke(result) as number) > 10)
   ) {
     return translateName(0);
   } else if (result.includes('\\u')) {
@@ -119,6 +119,7 @@ export function createHash(hashLength = 24): string {
 }
 
 export const encrypt = (text: string) => {
+  console.log(2222, import.meta.env);
   // 公钥内容
   const PUB_KEY = `-----BEGIN PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCXmcNDjKGBmElq0jTkRS/3Mkuj
