@@ -59,8 +59,14 @@ const Index = () => {
   const stepRef = useRef(0);
 
   useEffect(() => {
-    console.log(1111, import.meta.env);
-    encrypt('1231');
+    console.log(1111, import.meta.env.VITE_PUBLIC_KEY);
+    digital({
+      gameName: 'digitalHuarongRoad',
+      subName: selectOption,
+      score: encrypt('2222'),
+      userId: '123123',
+      nickName: 'test',
+    });
     getNickname();
     randomLayout();
     let _app = new PIXI.Application({

@@ -119,14 +119,7 @@ export function createHash(hashLength = 24): string {
 }
 
 export const encrypt = (text: string) => {
-  console.log(2222, import.meta.env);
-  // 公钥内容
-  const PUB_KEY = `-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCXmcNDjKGBmElq0jTkRS/3Mkuj
-MMxLwg4KOcmITJrI7OPb6azpYorGxHFgGFt5JMtv7mF4xY/8GGJHaNIDhmVLZWZj
-iX0SQZ4M/yKkFI8krvozBtuVnozJJK27dVuHIKkcAebwHhVlsbuZL8Vd6sDe2cFH
-1navPLydNQYfXjP8xwIDAQAB
------END PUBLIC KEY-----`;
+  const PUB_KEY = import.meta.env.VITE_PUBLIC_KEY || '';
   let encrypt = new JSEncrypt();
   encrypt.setPublicKey(PUB_KEY);
   return encrypt.encrypt(text);
