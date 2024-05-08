@@ -4,6 +4,7 @@ import * as PIXI from 'pixi.js';
 import { Modal, Select, Spin } from 'antd';
 import { getGameTop, digital } from '@/api/api';
 import { getRandomName, randomAccess, createHash, encrypt } from '../../utils';
+import { Icon } from '@iconify-icon/react';
 
 interface UserInfo {
   userId: string;
@@ -405,7 +406,21 @@ const Index = () => {
   return (
     <div className={styles.indexMain}>
       <div className={styles.indexBox}>
-        <h1 className={styles.gameTitle}>数字华容道</h1>
+        <div className={styles.headerBox}>
+          <h1 className={styles.gameTitle}>数字华容道</h1>
+          <div className={styles.iconBox}>
+            <Icon
+              icon="mdi:github"
+              className={styles.githubIcon}
+              onClick={() => {
+                window.open(
+                  'https://github.com/dearDreamWeb/digital-huarong-road'
+                );
+              }}
+            ></Icon>
+            <span className={styles.iconText}>喜欢的话请给个start</span>
+          </div>
+        </div>
         <div className={styles.username}>
           你好哇！<span>{userInfo.nickname || ''}</span>
           <span onClick={changeNickname}>更换昵称</span>

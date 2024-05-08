@@ -13,14 +13,65 @@
   .indexBox {
     position: relative;
 
-    .gameTitle {
-      margin-bottom: 20px;
-      font-size: 60px;
-      text-align: center;
-      background-image: linear-gradient(to right, #65F590, #6F80EF);
-      /* stylelint-disable-next-line property-no-vendor-prefix */
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .headerBox {
+      display: flex;
+      justify-content: center;
+
+      .gameTitle {
+        margin-bottom: 20px;
+        font-size: 60px;
+        text-align: center;
+        background-image: linear-gradient(to right, #65F590, #6F80EF);
+        /* stylelint-disable-next-line property-no-vendor-prefix */
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .iconBox {
+        position: relative;
+        margin: auto 0;
+        height: 32px;
+
+        .githubIcon {
+          position: relative;
+          font-size: 32px;
+          color: #FFFFFF;
+          cursor: pointer;
+
+          &:hover {
+            color: #CCCCCC;
+          }
+        }
+
+        .iconText {
+          position: absolute;
+          bottom: 50%;
+          left: 100%;
+          display: inline-flex;
+          align-items: center;
+          margin-left: 8px;
+          border-radius: 6px;
+          padding: 0 8px;
+          height: 24px;
+          font-size: 12px;
+          font-weight: bold;
+          white-space: nowrap;
+          color: #333333;
+          background-color: #FFFFFF;
+          transform: translateY(50%);
+
+          &::before {
+            position: absolute;
+            top: 50%;
+            left: -6px;
+            width: 8px;
+            height: 8px;
+            background-color: #FFFFFF;
+            content: "";
+            transform: rotateZ(45deg) translateY(-50%);
+          }
+        }
+      }
     }
 
     .username {

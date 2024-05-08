@@ -13,6 +13,7 @@
     "lint:style": "stylelint \"src/**/*.(less|scss|css)\" --fix"
   },
   "dependencies": {
+    "@iconify-icon/react": "^2.1.0",
     "antd": "^5.0.1",
     "axios": "^1.2.0",
     "cnchar": "^3.2.2",
@@ -72,5 +73,8 @@
       "pre-commit": "echo 'git commit trigger husky pre-commit hook' ",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "volta": {
+    "node": "16.20.2"
   }
 }
