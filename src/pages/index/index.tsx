@@ -5,6 +5,7 @@ import { Modal, Select, Spin } from 'antd';
 import { getGameTop, digital } from '@/api/api';
 import { getRandomName, randomAccess, createHash, encrypt } from '../../utils';
 import { Icon } from '@iconify-icon/react';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 interface UserInfo {
   userId: string;
@@ -101,17 +102,24 @@ const Index = () => {
     );
   };
 
+  const getUserId = async () => {
+    const fp = await FingerprintJS.load();
+    const result = await fp.get();
+    return result.visitorId;
+  };
+
   /**
    * 获取用户名
    */
-  const getNickname = () => {
+  const getNickname = async () => {
     const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
     if (userInfo.userId && userInfo.nickname) {
       setUserInfo(userInfo);
     } else {
+      const userId = await getUserId();
       const userInfo = {
         nickname: getRandomName(randomAccess(2, 6)),
-        userId: createHash(),
+        userId,
       };
       localStorage.setItem('userInfo', JSON.stringify(userInfo));
       setUserInfo(userInfo);
