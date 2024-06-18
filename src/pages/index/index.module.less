@@ -179,6 +179,17 @@
           -webkit-text-fill-color: transparent;
         }
 
+        .switchBox {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          .switchText {
+            margin-left: 8px;
+            color: #FFFFFF;
+          }
+        }
+
         .topListBox {
           padding: 0 12px;
           font-size: 30px;
@@ -227,8 +238,10 @@
               overflow: hidden;
               padding: 0 4px;
               font-size: 24px;
+              text-align: center;
               text-overflow: ellipsis;
               white-space: nowrap;
+              flex: 1;
             }
 
             & :last-child {

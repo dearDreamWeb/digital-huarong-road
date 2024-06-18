@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './index.module.less';
 import * as PIXI from 'pixi.js';
-import { Modal, Select, Spin } from 'antd';
-import { getGameTop, digital } from '@/api/api';
+import { Modal, Select, Spin, Switch } from 'antd';
+import { getGameTop, digital, getGameTopV2 } from '@/api/api';
 import { getRandomName, randomAccess, createHash, encrypt } from '../../utils';
 import { Icon } from '@iconify-icon/react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
@@ -16,6 +16,18 @@ interface TopListItem {
   id: string;
   nickName: string;
   score: number;
+}
+
+interface UniqueTopListItemUserItem {
+  createdAt: string;
+  nickName: string;
+  userId: string;
+}
+
+interface UniqueTopListItem {
+  id: number;
+  count: number;
+  users: UniqueTopListItemUserItem[];
 }
 
 const defaultList = [
@@ -56,9 +68,11 @@ const Index = () => {
     nickname: '',
   });
   const [topList, setTopList] = useState<TopListItem[]>([]);
+  const [uniqueTopList, setUniqueTopList] = useState<UniqueTopListItem[]>([]); // 去重
   const [loading, setLoading] = useState(false);
   const timerInterval = useRef<NodeJS.Timer>();
   const stepRef = useRef(0);
+  const [switchOpen, setSwitchOpen] = useState(false);
 
   useEffect(() => {
     getNickname();
@@ -78,28 +92,42 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
+    console.log('switchOpen', switchOpen);
     getGameTopHandler();
-  }, [selectOption]);
+  }, [selectOption, switchOpen]);
 
   /**
    * 获取游戏top榜
    * @returns
    */
   const getGameTopHandler = async () => {
-    setLoading(true);
-    const res: any = await getGameTop({
-      gameName: 'digitalHuarongRoad',
-      subName: selectOption,
-    });
-    setLoading(false);
-    if (!res.success) {
-      return;
+    if (switchOpen) {
+      setLoading(true);
+      const res: any = await getGameTopV2({
+        gameName: 'digitalHuarongRoad',
+        subName: selectOption,
+      });
+      setLoading(false);
+      if (!res.success) {
+        return;
+      }
+      setUniqueTopList(res.data?.result);
+    } else {
+      setLoading(true);
+      const res: any = await getGameTop({
+        gameName: 'digitalHuarongRoad',
+        subName: selectOption,
+      });
+      setLoading(false);
+      if (!res.success) {
+        return;
+      }
+      setTopList(
+        res.data?.result.map((item: any) => {
+          return { ...item, id: item._id };
+        })
+      );
     }
-    setTopList(
-      res.data?.result.map((item: any) => {
-        return { ...item, id: item._id };
-      })
-    );
   };
 
   const getUserId = async () => {
@@ -156,22 +184,25 @@ const Index = () => {
   }, [app]);
 
   useEffect(() => {
-    if (isWin) {
-      setIsStop(true);
-      timerInterval.current && clearInterval(timerInterval.current);
-      digital({
-        gameName: 'digitalHuarongRoad',
-        subName: selectOption,
-        score: encrypt(stepRef.current.toString()),
-        userId: userInfo.userId,
-        nickName: userInfo.nickname,
-      }).then((res: any) => {
-        if (!res.success) {
-          return;
-        }
-        getGameTopHandler();
-      });
-    }
+    (async () => {
+      if (isWin) {
+        setIsStop(true);
+        timerInterval.current && clearInterval(timerInterval.current);
+        const userId = await getUserId();
+        digital({
+          gameName: 'digitalHuarongRoad',
+          subName: selectOption,
+          score: encrypt(stepRef.current.toString()),
+          userId,
+          nickName: userInfo.nickname,
+        }).then((res: any) => {
+          if (!res.success) {
+            return;
+          }
+          getGameTopHandler();
+        });
+      }
+    })();
   }, [isWin]);
 
   /**
@@ -453,7 +484,7 @@ const Index = () => {
           </div>
         </div>
         <div className={styles.stageBox} style={{ height: `${stageHeight}px` }}>
-          <canvas id="mainCanvas"></canvas>
+          <canvas id="mainCanvas" style={{ opacity: 0 }}></canvas>
           {isStop && (
             <div className={styles.stageMask}>
               <div
@@ -470,14 +501,39 @@ const Index = () => {
           )}
           <div className={styles.leaderBoardBox}>
             <div className={styles.leaderBoardTitle}>排行榜🔥</div>
+            <div className={styles.switchBox}>
+              <Switch
+                checked={switchOpen}
+                onChange={(checked) => setSwitchOpen(checked)}
+              ></Switch>
+              <span className={styles.switchText}>
+                {switchOpen ? '去重' : '不去重'}
+              </span>
+            </div>
             <div className={styles.topListBox}>
-              {topList.map((item, index) => (
-                <div key={item.id} className={styles.topListItem}>
-                  <span>{index + 1}</span>
-                  <span title={item.nickName}>{item.nickName}</span>
-                  <span>{item.score}</span>
-                </div>
-              ))}
+              {switchOpen
+                ? uniqueTopList.map((item, index) => (
+                    <div key={item.id} className={styles.topListItem}>
+                      <span>{index + 1}</span>
+                      <span
+                        title={item.users
+                          .map((itemUser) => itemUser.nickName)
+                          .join('\n')}
+                      >
+                        {item.users
+                          .map((itemUser) => itemUser.nickName)
+                          .join('、')}
+                      </span>
+                      <span>{item.id}</span>
+                    </div>
+                  ))
+                : topList.map((item, index) => (
+                    <div key={item.id} className={styles.topListItem}>
+                      <span>{index + 1}</span>
+                      <span title={item.nickName}>{item.nickName}</span>
+                      <span>{item.score}</span>
+                    </div>
+                  ))}
             </div>
             {loading && (
               <div className={styles.loadingBox}>

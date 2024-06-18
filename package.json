@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "rm -rf ./dist && tsc && vite build",
+    "build": "rimraf -rf ./dist && tsc && vite build",
     "preview": "vite preview --host",
     "lint": "npx --no -- lint-staged",
     "prepare": "husky install",
@@ -47,6 +47,7 @@
     "prettier": "^2.7.1",
     "react-router-config": "^5.1.1",
     "react-router-dom": "5.2.0",
+    "rimraf": "^5.0.7",
     "stylelint": "^14.14.0",
     "stylelint-config-css-modules": "^4.1.0",
     "stylelint-config-prettier": "^9.0.3",
