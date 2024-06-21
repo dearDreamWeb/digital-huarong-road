@@ -484,7 +484,7 @@ const Index = () => {
           </div>
         </div>
         <div className={styles.stageBox} style={{ height: `${stageHeight}px` }}>
-          <canvas id="mainCanvas" style={{ opacity: 0 }}></canvas>
+          <canvas id="mainCanvas"></canvas>
           {isStop && (
             <div className={styles.stageMask}>
               <div
