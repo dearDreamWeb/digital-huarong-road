@@ -16,6 +16,7 @@ interface TopListItem {
   id: string;
   nickName: string;
   score: number;
+  createdAt: string;
 }
 
 interface UniqueTopListItemUserItem {
@@ -532,7 +533,10 @@ const Index = () => {
                     </div>
                   ))
                 : topList.map((item, index) => (
-                    <div key={item.id} className={styles.topListItem}>
+                    <div
+                      key={`${item.id}-${item.createdAt}`}
+                      className={styles.topListItem}
+                    >
                       <span>{index + 1}</span>
                       <span title={item.nickName}>{item.nickName}</span>
                       <span>{item.score}</span>
