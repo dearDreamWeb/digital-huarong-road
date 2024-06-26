@@ -405,13 +405,14 @@ const Index = () => {
     pixiContainer.cursor = 'pointer';
     pixiContainer.isSprite = true;
     pixiContainer.interactive = true;
+    pixiContainer.filters = [new PIXI.filters.NoiseFilter(0.3, 0.6)];
 
     const numberRect = new PIXI.Graphics();
     numberRect.lineStyle(2, 0x000000, 1); //边线(宽度，颜色，透明度)
     numberRect.beginFill(0x1099bb); //填充
     numberRect.drawRect(x, y, w, h); //x,y,w,h
     numberRect.endFill();
-    numberRect.filters = [new PIXI.filters.NoiseFilter(0.3, 0.6)];
+    // numberRect.filters = [new PIXI.filters.NoiseFilter(0.3, 0.6)];
 
     let pixiText = new PIXI.Text(`${text || ''}`, {
       fontFamily: 'ZpixLocal',
