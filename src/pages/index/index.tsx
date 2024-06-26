@@ -43,7 +43,10 @@ const optionsList = [
   { value: '5X5', label: '5X5' },
   { value: '6X6', label: '6X6' },
   { value: '7X7', label: '7X7' },
+  { value: '8X6', label: '8X6' },
   { value: '8X8', label: '8X8' },
+  { value: '9X9', label: '9X9' },
+  { value: '10X10', label: '10X10' },
 ];
 
 const stageWidth = 600;
@@ -111,7 +114,7 @@ const Index = () => {
       if (!res.success) {
         return;
       }
-      setUniqueTopList(res.data?.result);
+      setUniqueTopList(res.data?.result || []);
     } else {
       setLoading(true);
       const res: any = await getGameTop({
@@ -123,9 +126,9 @@ const Index = () => {
         return;
       }
       setTopList(
-        res.data?.result.map((item: any) => {
+        res.data?.result?.map((item: any) => {
           return { ...item, id: item._id };
-        })
+        }) || []
       );
     }
   };
