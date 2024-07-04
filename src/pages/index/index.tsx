@@ -2,11 +2,18 @@ import { useEffect, useRef, useState } from 'react';
 import styles from './index.module.less';
 import * as PIXI from 'pixi.js';
 import { Modal, Select, Spin, Switch } from 'antd';
-import { getGameTop, digital, getGameTopV2 } from '@/api/api';
+import {
+  getGameTop,
+  digital,
+  getGameTopV2,
+  getGameTodayHistory,
+} from '@/api/api';
 import { getRandomName, randomAccess, createHash, encrypt } from '../../utils';
 import { Icon } from '@iconify-icon/react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { RATE } from '@/App';
+import { useTodayHistory } from './hooks/useTodayHistory';
+import dayjs from 'dayjs';
 
 interface UserInfo {
   userId: string;
@@ -79,6 +86,9 @@ const Index = () => {
   const timerInterval = useRef<NodeJS.Timer>();
   const stepRef = useRef(0);
   const [switchOpen, setSwitchOpen] = useState(false);
+  const messageRef = useRef<HTMLDivElement>(null);
+
+  const { historyList, getTodayHistoryList } = useTodayHistory();
 
   useEffect(() => {
     getNickname();
@@ -100,6 +110,7 @@ const Index = () => {
   useEffect(() => {
     console.log('switchOpen', switchOpen);
     getGameTopHandler();
+    getTodayHistoryList();
   }, [selectOption, switchOpen]);
 
   /**
@@ -201,11 +212,13 @@ const Index = () => {
           score: encrypt(stepRef.current.toString()),
           userId,
           nickName: userInfo.nickname,
+          data: encrypt(JSON.stringify({ time })),
         }).then((res: any) => {
           if (!res.success) {
             return;
           }
           getGameTopHandler();
+          getTodayHistoryList();
         });
       }
     })();
@@ -451,6 +464,10 @@ const Index = () => {
     getNickname();
   };
 
+  useEffect(() => {
+    messageRef.current?.scrollBy(0, messageRef.current?.scrollHeight || 0);
+  }, [historyList]);
+
   return (
     <div className={styles.indexMain}>
       <div className={styles.indexBox}>
@@ -493,6 +510,32 @@ const Index = () => {
           </div>
         </div>
         <div className={styles.stageBox} style={{ height: `${stageHeight}px` }}>
+          <div className={styles.leaderMessageBox} ref={messageRef}>
+            <div className={styles.leaderMessageTitle}>播报</div>
+            <div className={styles.messageListBox}>
+              {historyList.map((item: any) => (
+                <div key={item.id} className={styles.messageListItem}>
+                  <div className={styles.messageListItemTime}>
+                    {dayjs(item.createdAt).format('YYYY-MM-DD HH:mm:ss')}
+                  </div>
+                  <div className={styles.messageListItemText}>
+                    玩家
+                    <span className={styles.messageListItemNickName}>
+                      {item.nickName}
+                    </span>
+                    通关
+                    <span className={styles.messageListItemSubType}>
+                      {item.subType}
+                    </span>
+                    ，成绩：
+                    <span className={styles.messageListItemScore}>
+                      {item.score}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
           <canvas id="mainCanvas"></canvas>
           {isStop && (
             <div className={styles.stageMask}>
@@ -568,6 +611,16 @@ const Index = () => {
         <div>步数：{step}</div>
         <div>用时：{(time / 1000).toFixed(2)}秒</div>
       </Modal>
+      <div
+        className={styles.feedbackBox}
+        onClick={() =>
+          window.open(
+            'https://github.com/dearDreamWeb/digital-huarong-road/issues'
+          )
+        }
+      >
+        反馈
+      </div>
     </div>
   );
 };

@@ -155,6 +155,97 @@
         }
       }
 
+      .leaderMessageBox {
+        position: relative;
+        overflow-y: auto;
+        margin-right: .12rem;
+        // position: absolute;
+        // top: 0;
+        // left: calc(100% + 12px);
+        border: .04rem solid;
+        border-radius: .08rem;
+        width: 2rem;
+        height: 100%;
+        background-color: rgb(255 255 255 / 20%);
+
+        /* 定义滚动条样式 */
+        &::-webkit-scrollbar {
+          width: .06rem;
+          height: .06rem;
+        }
+
+        /* 定义滚动条轨道 内阴影+圆角 */
+        &::-webkit-scrollbar-track {
+          border-radius: .1rem;
+          background-color: #272D44;
+          box-shadow: inset 0 0 0 rgb(240 240 240 / 50%);
+        }
+
+        /* 定义滑块 内阴影+圆角 */
+        &::-webkit-scrollbar-thumb {
+          border-radius: .1rem;
+          background-color: rgb(240 240 240 / 50%);
+          box-shadow: inset 0 0 0 rgb(240 240 240 / 50%);
+        }
+
+        &::before {
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          z-index: -1;
+          background-repeat: no-repeat;
+          background-size: cover;
+          filter: blur(10px);
+          content: "";
+          background-attachment: fixed;
+        }
+
+        .leaderMessageTitle {
+          margin-top: .12rem;
+          margin-bottom: .12rem;
+          font-size: .28rem;
+          text-align: center;
+          background-image: linear-gradient(to right, #339CE8, #E4EF6F);
+          /* stylelint-disable-next-line property-no-vendor-prefix */
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .messageListBox {
+          display: flex;
+          flex-direction: column;
+          font-size: .16rem;
+
+          .messageListItem {
+            margin-bottom: .16rem;
+
+            .messageListItemTime {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              margin-bottom: .04rem;
+              color: #FFFFFF;
+              flex-wrap: wrap;
+            }
+
+            .messageListItemText {
+              display: flex;
+              align-items: center;
+              flex-wrap: wrap;
+
+              .messageListItemNickName,
+              .messageListItemSubType,
+              .messageListItemScore {
+                margin: 0 .04rem;
+                color: #FFFFFF;
+              }
+            }
+          }
+        }
+      }
+
       .leaderBoardBox {
         position: relative;
         margin-left: .12rem;
@@ -272,6 +363,25 @@
           }
         }
       }
+    }
+  }
+
+  .feedbackBox {
+    position: fixed;
+    right: .32rem;
+    bottom: .24rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: .44rem;
+    height: .44rem;
+    color: #333333;
+    background-color: #FFFFFF;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #68F9CB;
     }
   }
 }

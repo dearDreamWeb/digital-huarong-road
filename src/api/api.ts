@@ -29,3 +29,13 @@ export const digital = (data: any) => {
     data,
   });
 };
+
+/**
+ * 今天的记录
+ */
+export const getGameTodayHistory = (data: any) => {
+  return request('/v1/game/getGameTodayHistory', {
+    method: 'get',
+    data,
+  }) as Promise<any>;
+};
