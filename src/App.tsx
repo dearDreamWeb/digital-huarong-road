@@ -8,7 +8,7 @@ import 'antd/dist/reset.css';
 export const RATE = screen.width / 1920;
 
 function App() {
-  document.documentElement.style.setProperty('--rate', RATE.toString());
+  document.documentElement.style.fontSize = `${RATE * 100}px`;
   return <div className={styles.app}>{renderRoutes(routes)}</div>;
 }
 
