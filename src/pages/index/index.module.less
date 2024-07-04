@@ -18,8 +18,8 @@
       justify-content: center;
 
       .gameTitle {
-        margin-bottom: 20px;
-        font-size: 60px;
+        margin-bottom: calc(var(--rate) * 20px);
+        font-size: calc(var(--rate) * 60px);
         text-align: center;
         background-image: linear-gradient(to right, #65F590, #6F80EF);
         /* stylelint-disable-next-line property-no-vendor-prefix */
@@ -34,7 +34,7 @@
 
         .githubIcon {
           position: relative;
-          font-size: 32px;
+          font-size: calc(var(--rate) * 32px);
           color: #FFFFFF;
           cursor: pointer;
 
@@ -49,11 +49,11 @@
           left: 100%;
           display: inline-flex;
           align-items: center;
-          margin-left: 8px;
-          border-radius: 6px;
-          padding: 0 8px;
-          height: 24px;
-          font-size: 12px;
+          margin-left: calc(var(--rate) * 8px);
+          border-radius: calc(var(--rate) * 6px);
+          padding: 0 calc(var(--rate) * 8px);
+          height: calc(var(--rate) * 24px);
+          font-size: calc(var(--rate) * 12px);
           font-weight: bold;
           white-space: nowrap;
           color: #333333;
@@ -75,8 +75,8 @@
     }
 
     .username {
-      margin-bottom: 24px;
-      font-size: 24px;
+      margin-bottom: calc(var(--rate) * 24px);
+      font-size: calc(var(--rate) * 24px);
       text-align: center;
 
       & span:first-child {
@@ -92,7 +92,7 @@
         margin-left: 8px;
         border-radius: 5px;
         padding: 4px 8px;
-        font-size: 16px;
+        font-size: calc(var(--rate) * 16px);
         color: #FFFFFF;
         background-color: #339CE8;
         cursor: pointer;
@@ -103,7 +103,7 @@
       display: flex;
       justify-content: space-between;
       margin: 8px 0;
-      font-size: 24px;
+      font-size: calc(var(--rate) * 24px);
 
       & > div {
         & > span {
@@ -116,7 +116,7 @@
 
       :global {
         .ant-select-selection-item {
-          font-size: 18px;
+          font-size: calc(var(--rate) * 18px);
           font-family: ZpixLocal, sans-serif;
           font-weight: bold;
           color: #000000;
@@ -150,7 +150,7 @@
           border-radius: 5px;
           padding: 4px 8px;
           cursor: pointer;
-          font-size: 28px;
+          font-size: calc(var(--rate) * 28px);
           background-color: #FFFFFF;
         }
       }
@@ -171,7 +171,7 @@
         .leaderBoardTitle {
           margin-top: 12px;
           margin-bottom: 12px;
-          font-size: 28px;
+          font-size: calc(var(--rate) * 28px);
           text-align: center;
           background-image: linear-gradient(to right, #339CE8, #E4EF6F);
           /* stylelint-disable-next-line property-no-vendor-prefix */
@@ -192,13 +192,13 @@
 
         .topListBox {
           padding: 0 12px;
-          font-size: 30px;
+          font-size: calc(var(--rate) * 30px);
 
           .topListItem {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: calc(var(--rate) * 8px);
 
             &:nth-of-type(1) {
               & :first-child {
@@ -226,18 +226,17 @@
               justify-content: center;
               align-items: center;
               border-radius: 50%;
-              padding: 4px;
-              width: 28px;
-              height: 28px;
-              font-size: 24px;
+              width: calc(var(--rate) * 28px);
+              height: calc(var(--rate) * 28px);
+              font-size: calc(var(--rate) * 24px);
               color: #CCCCCC;
               background-color: #FFFFFF;
             }
 
             & :nth-of-type(2) {
               overflow: hidden;
-              padding: 0 4px;
-              font-size: 24px;
+              padding: 0 calc(var(--rate) * 4px);
+              font-size: calc(var(--rate) * 24px);
               text-align: center;
               text-overflow: ellipsis;
               white-space: nowrap;
@@ -298,18 +297,18 @@
         color: red;
 
         .ant-modal-close-x {
-          font-size: 28px;
+          font-size: calc(var(--rate) * 28px);
         }
       }
 
       .ant-modal-title {
-        font-size: 40px;
+        font-size: calc(var(--rate) * 40px);
         color: #DB5540;
       }
     }
 
     .ant-modal-body {
-      font-size: 28px;
+      font-size: calc(var(--rate) * 28px);
     }
 
     .ant-modal-footer {
@@ -324,7 +323,7 @@
 
 :global {
   .ant-select-item-option-content {
-    font-size: 18px;
+    font-size: calc(var(--rate) * 18px);
     font-family: ZpixLocal, sans-serif;
     font-weight: bold;
     color: #000000;

@@ -6,6 +6,7 @@ import { getGameTop, digital, getGameTopV2 } from '@/api/api';
 import { getRandomName, randomAccess, createHash, encrypt } from '../../utils';
 import { Icon } from '@iconify-icon/react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import { RATE } from '@/App';
 
 interface UserInfo {
   userId: string;
@@ -50,8 +51,9 @@ const optionsList = [
   { value: '10X10', label: '10X10' },
 ];
 
-const stageWidth = 600;
-const stageHeight = 600;
+console.log('rate', RATE, 600 * RATE);
+const stageWidth = 600 * RATE;
+const stageHeight = 600 * RATE;
 
 const Index = () => {
   const [app, setApp] = useState<PIXI.Application<PIXI.ICanvas>>();
@@ -417,7 +419,9 @@ const Index = () => {
 
     let pixiText = new PIXI.Text(`${text || ''}`, {
       fontFamily: 'ZpixLocal',
-      fontSize: Number(selectOption.split('X')[0]) > 6 ? 28 : 36,
+      fontSize: Math.floor(
+        RATE * (Number(selectOption.split('X')[0]) > 6 ? 28 : 36)
+      ),
       stroke: '#4a1850',
       fontWeight: 'bold',
       fill: ['#ffffff', '#00ff99'],
@@ -427,8 +431,8 @@ const Index = () => {
       dropShadowColor: '#000000',
       dropShadowBlur: 4,
     });
-    pixiText.x = x + w / 2 - 18;
-    pixiText.y = y + h / 2 - 18;
+    pixiText.x = x + w / 2 - pixiText.width / 2;
+    pixiText.y = y + h / 2 - pixiText.height / 2;
     pixiContainer.addChild(numberRect);
     pixiContainer.addChild(pixiText);
     app!.stage.addChild(pixiContainer); //添加到舞台中
