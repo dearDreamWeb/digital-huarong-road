@@ -212,7 +212,7 @@ const Index = () => {
           score: encrypt(stepRef.current.toString()),
           userId,
           nickName: userInfo.nickname,
-          data: encrypt(JSON.stringify({ time })),
+          data: encrypt(JSON.stringify({ time, referrer: document.referrer })),
         }).then((res: any) => {
           if (!res.success) {
             return;
