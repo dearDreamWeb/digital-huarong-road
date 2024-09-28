@@ -516,9 +516,7 @@ const Index = () => {
               {historyList.map((item: any) => (
                 <div key={item.id} className={styles.messageListItem}>
                   <div className={styles.messageListItemTime}>
-                    {dayjs(item.createdAt)
-                      .add(-8, 'hours')
-                      .format('YYYY-MM-DD HH:mm:ss')}
+                    {dayjs(item.createdAt).format('YYYY-MM-DD HH:mm:ss')}
                   </div>
                   <div className={styles.messageListItemText}>
                     玩家
