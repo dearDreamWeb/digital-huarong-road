@@ -75,7 +75,9 @@ const Index = () => {
   const [time, setTime] = useState(0);
   // 游戏停止
   const [isStop, setIsStop] = useState(false);
-  const [selectOption, setSelectOption] = useState(optionsList[0].value);
+  const [selectOption, setSelectOption] = useState(
+    localStorage.getItem('selectedOption') || optionsList[0].value
+  );
   const [userInfo, setUserInfo] = useState<UserInfo>({
     userId: '',
     nickname: '',
@@ -456,6 +458,7 @@ const Index = () => {
   };
 
   const selectChange = (value: string) => {
+    localStorage.setItem('selectedOption', value);
     setSelectOption(value);
   };
 
