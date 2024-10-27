@@ -56,6 +56,7 @@ const optionsList = [
   { value: '8X8', label: '8X8' },
   { value: '9X9', label: '9X9' },
   { value: '10X10', label: '10X10' },
+  { value: '12X12', label: '12X12' },
 ];
 
 console.log('rate', RATE, 600 * RATE);
@@ -199,6 +200,7 @@ const Index = () => {
     if (!app) {
       return;
     }
+    reLayout();
     createItem();
   }, [app]);
 
@@ -253,8 +255,14 @@ const Index = () => {
    * 按照当前的选择模式初始化数据
    */
   const reLayout = () => {
+    if (!optionsList.some((item) => item.value === selectOption)) {
+      setSelectOption(optionsList[0].value);
+      localStorage.setItem('selectedOption', optionsList[0].value);
+      return;
+    }
     const rows1 = Number(selectOption.split('X')[0]);
     const columns1 = Number(selectOption.split('X')[1]);
+    console.log(11111, rows1, columns1);
     const arr = [];
     for (let i = 0; i < rows1; i++) {
       let tempArr = [];
