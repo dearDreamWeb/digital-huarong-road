@@ -200,7 +200,6 @@ const Index = () => {
     if (!app) {
       return;
     }
-    reLayout();
     createItem();
   }, [app]);
 
@@ -249,7 +248,7 @@ const Index = () => {
     reLayout();
     reStart();
     createItem();
-  }, [selectOption]);
+  }, [app, selectOption]);
 
   /**
    * 按照当前的选择模式初始化数据
@@ -262,7 +261,6 @@ const Index = () => {
     }
     const rows1 = Number(selectOption.split('X')[0]);
     const columns1 = Number(selectOption.split('X')[1]);
-    console.log(11111, rows1, columns1);
     const arr = [];
     for (let i = 0; i < rows1; i++) {
       let tempArr = [];
