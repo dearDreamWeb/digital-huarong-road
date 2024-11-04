@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './index.module.less';
 import * as PIXI from 'pixi.js';
-import { Modal, Select, Spin, Switch } from 'antd';
+import { message, Modal, Select, Spin, Switch } from 'antd';
 import {
   getGameTop,
   digital,
@@ -209,15 +209,24 @@ const Index = () => {
         setIsStop(true);
         timerInterval.current && clearInterval(timerInterval.current);
         const userId = await getUserId();
-        digital({
-          gameName: 'digitalHuarongRoad',
-          subName: selectOption,
-          score: encrypt(stepRef.current.toString()),
-          userId,
-          nickName: userInfo.nickname,
-          data: encrypt(JSON.stringify({ time, referrer: document.referrer })),
-        }).then((res: any) => {
+        digital(
+          encrypt(
+            JSON.stringify({
+              gameName: 'digitalHuarongRoad',
+              subName: selectOption,
+              score: stepRef.current,
+              userId,
+              nickName: userInfo.nickname,
+              data: {
+                time,
+                referrer: document.referrer,
+                historyId: createHash(),
+              },
+            })
+          )
+        ).then((res: any) => {
           if (!res.success) {
+            message.error('请求错误');
             return;
           }
           getGameTopHandler();

@@ -26,7 +26,9 @@ export const getGameTopV2 = (data: any) => {
 export const digital = (data: any) => {
   return request('/v1/game/addGameHistory', {
     method: 'post',
-    data,
+    data: {
+      data,
+    },
   });
 };
 
