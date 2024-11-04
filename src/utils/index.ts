@@ -126,7 +126,7 @@ export const encrypt = (text: string) => {
     inOffset = 0;
   let arr = [];
   while (inOffset < text.length) {
-    console.log(text.substring(inOffset, inOffset + maxChunkLength));
+    // console.log(text.substring(inOffset, inOffset + maxChunkLength));
     const str = encrypt.encrypt(
       text.substring(inOffset, inOffset + maxChunkLength)
     );
