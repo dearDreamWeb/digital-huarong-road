@@ -2,8 +2,11 @@ import cnchar from 'cnchar';
 import JSEncrypt from 'jsencrypt';
 
 // 获取指定范围内的随机数
-export function randomAccess(min: number, max: number) {
-  return Math.floor(Math.random() * (min - max) + max);
+export function randomAccess(min: number, max: number, isInt = true) {
+  if (isInt) {
+    return Math.floor(Math.random() * (min - max) + max);
+  }
+  return Math.random() * (min - max) + max;
 }
 
 // 解码
