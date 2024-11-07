@@ -4,6 +4,7 @@ import routes from '../config/routes';
 import { renderRoutes } from 'react-router-config';
 import 'antd/dist/reset.css';
 import Welcome from './components/welcome/welcome';
+import { Analytics } from '@vercel/analytics/react';
 
 /**屏幕分辨率比 */
 export const RATE = screen.width / 1920;
@@ -21,6 +22,7 @@ function App() {
     <div className={styles.app}>
       {renderRoutes(routes)}
       {!isOpen && <Welcome closeMask={closeMask}></Welcome>}
+      <Analytics />
     </div>
   );
 }
