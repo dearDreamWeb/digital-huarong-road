@@ -414,14 +414,6 @@
     .ant-modal-body {
       font-size: .28rem;
     }
-
-    .ant-modal-footer {
-      button {
-        &:first-of-type {
-          display: none;
-        }
-      }
-    }
   }
 }
 
@@ -437,5 +429,15 @@
     font-feature-settings: "tnum";
 
     --background-color: #EEFEE4;
+  }
+}
+
+.winModalFooter {
+  :global {
+    .ant-tooltip-inner {
+      width: 350px;
+      background-color: #FFFFFF;
+      box-sizing: content-box;
+    }
   }
 }

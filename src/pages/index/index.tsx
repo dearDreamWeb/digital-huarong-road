@@ -1,7 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './index.module.less';
 import * as PIXI from 'pixi.js';
-import { message, Modal, Select, Spin, Switch } from 'antd';
+import {
+  Button,
+  Divider,
+  message,
+  Modal,
+  Select,
+  Spin,
+  Switch,
+  Tooltip,
+} from 'antd';
 import {
   getGameTop,
   digital,
@@ -62,6 +71,14 @@ const optionsList = [
 console.log('rate', RATE, 600 * RATE);
 const stageWidth = 600 * RATE;
 const stageHeight = 600 * RATE;
+
+function st() {
+  return (
+    window.pageYOffset ||
+    document.documentElement.scrollTop ||
+    document.body.scrollTop
+  );
+}
 
 const Index = () => {
   const [app, setApp] = useState<PIXI.Application<PIXI.ICanvas>>();
@@ -485,6 +502,139 @@ const Index = () => {
   useEffect(() => {
     messageRef.current?.scrollBy(0, messageRef.current?.scrollHeight || 0);
   }, [historyList]);
+  /**
+   * 获取文字的居中x的距离
+   * @param width : ;
+   * @param fontSize
+   * @param length
+   * @returns
+   */
+  const centerX = useCallback(
+    (width: number, fontSize: number, length: number) => {
+      const x = (width - fontSize * length) / 2;
+      return x;
+    },
+    []
+  );
+  /**
+   * 绘制背景圆角
+   * @param ctx
+   * @param canvas
+   * @param radius
+   */
+  const canvasRenderBg = useCallback(
+    (
+      ctx: CanvasRenderingContext2D,
+      canvas: HTMLCanvasElement,
+      radius: number
+    ) => {
+      const x = 0;
+      const y = 0;
+      const width = canvas.width;
+      const height = canvas.height;
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y); // 移动到左上角的圆角开始位置
+      ctx.lineTo(x + width - radius, y); // 画直线到右上角的圆角开始位置
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius); // 画右上圆角
+      ctx.lineTo(x + width, y + height - radius); // 画直线到右下角的圆角开始位置
+      ctx.quadraticCurveTo(
+        x + width,
+        y + height,
+        x + width - radius,
+        y + height
+      ); // 画右下角
+      ctx.lineTo(x + radius, y + height); // 画直线到左下角的圆角开始位置
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius); // 画左下角
+      ctx.lineTo(x, y + radius); // 画直线到左上角的圆角开始位置
+      ctx.quadraticCurveTo(x, y, x + radius, y); // 画左上角
+      ctx.closePath(); // 关闭路径
+      let gradientBg = ctx.createLinearGradient(
+        canvas.width / 2,
+        0,
+        canvas.width / 2,
+        canvas.height
+      );
+      gradientBg.addColorStop(0, '#6DF4B7');
+      gradientBg.addColorStop(1, '#F1268C');
+      ctx.fillStyle = gradientBg;
+      ctx.fill();
+    },
+    []
+  );
+
+  /**
+   * canvas卡片绘制
+   * @returns
+   */
+  const canvasRender = () => {
+    const marginTop = 16;
+    const config = {
+      title: {
+        text: '数字华容道',
+        fontSize: 48,
+      },
+      subTitle: {
+        text: '恭喜你赢啦',
+        fontSize: 32,
+      },
+      mode: {
+        text: `模式：${selectOption}`,
+        fontSize: 24,
+      },
+      steps: {
+        text: `得分：${step}`,
+        fontSize: 24,
+      },
+    };
+    const canvas = document.createElement('canvas');
+    canvas.width = 350;
+    canvas.height = 200;
+    const ctx = canvas.getContext('2d')!;
+    ctx.save();
+    canvasRenderBg(ctx, canvas, 10);
+    ctx.restore();
+    ctx.save();
+    ctx.font = `bold ${config.title.fontSize}px ZpixLocal`;
+    ctx.fillStyle = '#fff';
+    const titleY = config.title.fontSize;
+    ctx.fillText(
+      config.title.text,
+      centerX(canvas.width, config.title.fontSize, config.title.text.length),
+      titleY
+    );
+    ctx.restore();
+    ctx.save();
+    ctx.font = `bold ${config.subTitle.fontSize}px ZpixLocal`;
+    ctx.fillStyle = '#fff';
+    const subTitleY = titleY + marginTop + config.subTitle.fontSize;
+    ctx.fillText(
+      config.subTitle.text,
+      centerX(350, config.subTitle.fontSize, config.subTitle.text.length),
+      subTitleY
+    );
+    ctx.restore();
+    ctx.save();
+    ctx.font = `bold ${config.mode.fontSize}px ZpixLocal`;
+    ctx.fillStyle = '#fff';
+    const modeY = subTitleY + marginTop + config.mode.fontSize;
+    ctx.fillText(
+      config.mode.text,
+      centerX(canvas.width, config.mode.fontSize, config.mode.text.length),
+      modeY
+    );
+    ctx.restore();
+    ctx.save();
+    ctx.font = `bold ${config.steps.fontSize}px ZpixLocal`;
+    ctx.fillStyle = '#fff';
+    const stepsTop = modeY + marginTop + config.steps.fontSize;
+    ctx.fillText(
+      config.steps.text,
+      centerX(canvas.width, config.steps.fontSize, config.steps.text.length),
+      stepsTop
+    );
+    ctx.restore();
+    return canvas;
+  };
 
   return (
     <div className={styles.indexMain}>
@@ -554,7 +704,7 @@ const Index = () => {
               ))}
             </div>
           </div>
-          <canvas id="mainCanvas"></canvas>
+          <canvas id="mainCanvas" width={350} height={350}></canvas>
           {isStop && (
             <div className={styles.stageMask}>
               <div
@@ -616,14 +766,38 @@ const Index = () => {
           </div>
         </div>
       </div>
+
       <Modal
         title="恭喜"
         open={isWin}
-        onOk={() => setIsWin(false)}
         onCancel={() => setIsWin(false)}
-        okText="确定"
-        className={styles.modalBox}
+        className={`${styles.modalBox} winModal`}
         maskClosable={false}
+        footer={
+          <div className={styles.winModalFooter}>
+            <Tooltip
+              placement="top"
+              title={<img src={canvasRender().toDataURL('image/png')}></img>}
+              className={styles.winToolTip}
+              getPopupContainer={(e) => e.parentElement as HTMLElement}
+            >
+              <Button
+                onClick={() => {
+                  const canvas = canvasRender();
+                  const link = document.createElement('a');
+                  link.href = canvas.toDataURL('image/png');
+                  link.download = `dhr-${selectOption}-${+new Date()}.png`;
+                  link.click();
+                }}
+              >
+                保存卡片
+              </Button>
+            </Tooltip>
+            <Button onClick={() => setIsWin(false)} type="primary">
+              确定
+            </Button>
+          </div>
+        }
       >
         <div>恭喜你赢啦！！！</div>
         <div>步数：{step}</div>
