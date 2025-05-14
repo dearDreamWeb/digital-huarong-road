@@ -1,5 +1,6 @@
 import cnchar from 'cnchar';
 import JSEncrypt from 'jsencrypt';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 // 获取指定范围内的随机数
 export function randomAccess(min: number, max: number, isInt = true) {
@@ -138,4 +139,10 @@ export const encrypt = (text: string) => {
   }
 
   return JSON.stringify(arr);
+};
+
+export const getUserId = async () => {
+  const fp = await FingerprintJS.load();
+  const result = await fp.get();
+  return result.visitorId;
 };

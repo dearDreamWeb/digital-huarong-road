@@ -1,4 +1,5 @@
 import { getGameTodayHistory } from '@/api/api';
+import { getUserId } from '@/utils';
 import { useEffect, useRef, useState } from 'react';
 
 export const useTodayHistory = () => {
@@ -19,10 +20,12 @@ export const useTodayHistory = () => {
 
   const getTodayHistoryList = async () => {
     try {
+      const userId = await getUserId();
       const res = await getGameTodayHistory({
         gameName: 'digitalHuarongRoad',
         page: 1,
         pageSize: 10000,
+        userId,
       });
       if (!res.success) {
         return;

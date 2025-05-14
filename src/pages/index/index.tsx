@@ -17,9 +17,14 @@ import {
   getGameTopV2,
   getGameTodayHistory,
 } from '@/api/api';
-import { getRandomName, randomAccess, createHash, encrypt } from '../../utils';
+import {
+  getRandomName,
+  randomAccess,
+  createHash,
+  encrypt,
+  getUserId,
+} from '../../utils';
 import { Icon } from '@iconify-icon/react';
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { RATE } from '@/App';
 import { useTodayHistory } from './hooks/useTodayHistory';
 import dayjs from 'dayjs';
@@ -165,12 +170,6 @@ const Index = () => {
         }) || []
       );
     }
-  };
-
-  const getUserId = async () => {
-    const fp = await FingerprintJS.load();
-    const result = await fp.get();
-    return result.visitorId;
   };
 
   /**
